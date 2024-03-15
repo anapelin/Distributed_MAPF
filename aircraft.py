@@ -3,7 +3,7 @@ This file contains the AircraftDistributed class that can be used to implement i
 
 Code in this file is just provided as guidance, you are free to deviate from it.
 """
-
+from single_agent_planner import *
 class AircraftDistributed(object):
     """Aircraft object to be used in the distributed planner."""
 
@@ -20,3 +20,24 @@ class AircraftDistributed(object):
         self.goal = goal
         self.id = agent_id
         self.heuristics = heuristics
+        self.priority = None
+        # define as a tuple
+        self.location = start
+        self.constraints = []
+
+    def path(self):
+        self.current_path = a_star(self.my_map, self.location, self.goal, self.heuristics, self.id, self.constraints)
+
+    def add_contraints(self, new_constraints):
+        self.constraints.append(new_constraints)
+
+
+    def replan(self):
+        self.current_path = a_star(self.my_map, self.location, self.goal, self.heuristics, self.id, self.contraints)
+
+
+
+
+
+
+
