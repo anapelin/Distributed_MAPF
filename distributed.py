@@ -39,6 +39,14 @@ class DistributedPlanningSolver(object):
         if radius < 3:
             return True
         return False
+
+    def direction_priority(self, direction1, direction2):
+        """
+        Fill in the direction rule right > left > up > down > stays
+        """
+        pass
+
+
     def find_solution(self):
         """
         Finds paths for all agents from start to goal locations. 
@@ -79,7 +87,10 @@ class DistributedPlanningSolver(object):
             for i in range(len(self.num_of_agents - 1)):
                 for j in range(len(self.num_of_agents)):
                     if self.detect_warning(DAgent[f'Agent{i}'].location, DAgent[f'Agent{j}'].location):
+                        #TODO: merge rules and create formula
+
                         #replan
+
                         pass
 
 

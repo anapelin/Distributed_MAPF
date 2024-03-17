@@ -32,9 +32,8 @@ class PrioritizedPlanningSolver(object):
 
         # agent index represents priority
         for i in range(self.num_of_agents):  # Find path for each agent
+            print(constraints)
 
-
-            # constraints.append({'agent': 0, 'loc': [(2, 1)], 'timestep': 1, 'positive': False})
             path = a_star(self.my_map, self.starts[i], self.goals[i], self.heuristics[i],
                           i, constraints)
             if path is None:
@@ -53,11 +52,18 @@ class PrioritizedPlanningSolver(object):
 
             for j in range(i+1, self.num_of_agents):
                 for time in range(len(path)):
-                    constraints.append({'agent': j, 'loc': path[time], 'timestep': time, 'positive': False})
-                    if time < (len(path)-1):
-                        constraints.append({'agent': j, 'loc': (path[time+1], path[time]), 'timestep': time+1, 'positive': False})
+                    if time == len(path) - 1:
+                        for time_at_goal in range(time, 100):
+                            constraints.append({'agent': j, 'loc': path[time], 'timestep': time_at_goal, 'positive': False})
+                    else:
+                        constraints.append({'agent': j, 'loc': path[time], 'timestep': time, 'positive': False})
+                    #print({'agent': j, 'loc': path[time], 'timestep': time, 'positive': False})
+                    if time < len(path) - 1:
+                        constraints.append({'agent': j, 'loc': (path[time+1], path[time]), 'timestep': time + 1, 'positive': False})
+                        #print({'agent': j, 'loc': (path[time+1], path[time]), 'timestep': time + 1, 'positive': False})
 
-        print(constraints)
+
+        ##############################
 
         self.CPU_time = timer.time() - start_time
 
