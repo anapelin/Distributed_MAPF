@@ -36,6 +36,10 @@ class PrioritizedPlanningSolver(object):
 
             path = a_star(self.my_map, self.starts[i], self.goals[i], self.heuristics[i],
                           i, constraints)
+
+            print(self.my_map, self.starts[i], self.goals[i], self.heuristics[i],
+                          i, constraints)
+            print(path, i)
             if path is None:
                 raise BaseException('No solutions')
             result.append(path)
@@ -50,16 +54,19 @@ class PrioritizedPlanningSolver(object):
 
             #############################
 
-            for j in range(i+1, self.num_of_agents):
-                for time in range(len(path)):
+            for time, loc in enumerate(path):
+                for j in range(i, self.num_of_agents):
                     if time == len(path) - 1:
                         for time_at_goal in range(time, 100):
-                            constraints.append({'agent': j, 'loc': path[time], 'timestep': time_at_goal, 'positive': False})
+                            v_constraint = {'agent': j, 'loc': [path[time]], 'timestep': time_at_goal, 'positive': False}
+                            constraints.append(v_constraint)
                     else:
-                        constraints.append({'agent': j, 'loc': path[time], 'timestep': time, 'positive': False})
-                    #print({'agent': j, 'loc': path[time], 'timestep': time, 'positive': False})
+                        v_constraint = {'agent': j, 'loc': [path[time]], 'timestep': time, 'positive': False}
+                        constraints.append(v_constraint)
+                        #print({'agent': j, 'loc': path[time], 'timestep': time, 'positive': False})
                     if time < len(path) - 1:
-                        constraints.append({'agent': j, 'loc': (path[time+1], path[time]), 'timestep': time + 1, 'positive': False})
+                        e_constraint = {'agent': j, 'loc': [path[time+1], loc], 'timestep': time + 1, 'positive': False}
+                        constraints.append(e_constraint)
                         #print({'agent': j, 'loc': (path[time+1], path[time]), 'timestep': time + 1, 'positive': False})
 
 

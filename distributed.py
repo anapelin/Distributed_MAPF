@@ -47,7 +47,7 @@ class DistributedPlanningSolver(object):
         pass
 
 
-    def find_solution(self):
+    def find_solution_wrong(self):
         """
         Finds paths for all agents from start to goal locations. 
         
@@ -103,3 +103,57 @@ class DistributedPlanningSolver(object):
         print(result)
 
         return result  # Hint: this should be the final result of the distributed planning (visualization is done after planning)
+
+    def find_solution(self):
+        """ Finds paths for all agents from their start locations to their goal locations."""
+
+        start_time = timer.time()
+        result = []
+        constraints = []
+
+        # agent index represents priority
+        for i in range(self.num_of_agents):  # Find path for each agent
+            print(constraints)
+
+            path = a_star(self.my_map, self.starts[i], self.goals[i], self.heuristics[i],
+                          i, constraints)
+
+            print(self.my_map, self.starts[i], self.goals[i], self.heuristics[i],
+                          i, constraints)
+            print(path, i)
+            if path is None:
+                raise BaseException('No solutions')
+            result.append(path)
+
+            ##############################
+            # Task 2: Add constraints here
+            #         Useful variables:
+            #            * path contains the solution path of the current (i'th) agent, e.g., [(1,1),(1,2),(1,3)]
+            #            * self.num_of_agents has the number of total agents
+            #            * constraints: array of constraints to consider for future A* searches
+
+
+            #############################
+
+            for j in range(i+1, self.num_of_agents):
+                for time in range(len(path)):
+                    if time == len(path) - 1:
+                        for time_at_goal in range(time, 100):
+                            constraints.append({'agent': j, 'loc': path[time], 'timestep': time_at_goal, 'positive': False})
+                    else:
+                        constraints.append({'agent': j, 'loc': path[time], 'timestep': time, 'positive': False})
+                        #print({'agent': j, 'loc': path[time], 'timestep': time, 'positive': False})
+                    if time < len(path) - 1:
+                        constraints.append({'agent': j, 'loc': (path[time+1], path[time]), 'timestep': time + 1, 'positive': False})
+                        #print({'agent': j, 'loc': (path[time+1], path[time]), 'timestep': time + 1, 'positive': False})
+
+
+        ##############################
+
+        self.CPU_time = timer.time() - start_time
+
+        print("\n Found a solution! \n")
+        print("CPU time (s):    {:.2f}".format(self.CPU_time))
+        print("Sum of costs:    {}".format(get_sum_of_cost(result)))
+        print(result)
+        return result

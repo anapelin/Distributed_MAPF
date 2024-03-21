@@ -39,14 +39,11 @@ def print_locations(my_map, locations):
     See docstring print_mapf_instance function above.
     """
     starts_map = [[-1 for _ in range(len(my_map[0]))] for _ in range(len(my_map))]
-    # assigns agent number
     for i in range(len(locations)):
         starts_map[locations[i][0]][locations[i][1]] = i
     to_print = ''
-
-    # prints actual map with agent positions
-    for x in range(len(my_map)): #no of rows
-        for y in range(len(my_map[0])): # no of columns
+    for x in range(len(my_map)):
+        for y in range(len(my_map[0])):
             if starts_map[x][y] >= 0:
                 to_print += str(starts_map[x][y]) + ' '
             elif my_map[x][y]:
@@ -66,7 +63,7 @@ def import_mapf_instance(filename):
         Line X+1: xCoordStart yCoordStart xCoordGoal yCoordGoal (xy coordinate start and goal for Agent 1)
         Line X+2: xCoordStart yCoordStart xCoordGoal yCoordGoal (xy coordinate start and goal for Agent 2)
         Line X+n: xCoordStart yCoordStart xCoordGoal yCoordGoal (xy coordinate start and goal for Agent n)
-        
+
     Example:
         4 7             # grid with 4 rows and 7 columns
         @ @ @ @ @ @ @   # example row with obstacle in every column
@@ -123,7 +120,7 @@ if __name__ == '__main__':
                         help='The solver to use (one of: {CBS,Independent,Prioritized}), defaults to ' + str(SOLVER))
 
     args = parser.parse_args()
-    # Hint: Command line options can be added in Spyder by pressing CTRL + F6 > Command line options. 
+    # Hint: Command line options can be added in Spyder by pressing CTRL + F6 > Command line options.
     # In PyCharm, they can be added as parameters in the configuration.
 
     result_file = open("results.csv", "w", buffering=1)
