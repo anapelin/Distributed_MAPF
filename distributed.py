@@ -29,8 +29,7 @@ class DistributedPlanningSolver(object):
         # T.B.D.
 
         for goal in self.goals:
-            self.heuristics.append(compute_heuristics(my_map,
-                                                      goal))  # each goal has own set of heuristics, appended to list -> ordered by agent index
+            self.heuristics.append(compute_heuristics(my_map, goal))  # each goal has own set of heuristics, appended to list -> ordered by agent index
 
     def detect_warning(self, location1, location2):
 
@@ -45,6 +44,9 @@ class DistributedPlanningSolver(object):
         Fill in the direction rule right > left > up > down > stays
         """
         pass
+
+    def solve_priority(self, agent1: AircraftDistributed, agent2: AircraftDistributed):
+        return max(agent1.id, agent2.id)
 
 
     def find_solution_wrong(self):
@@ -79,15 +81,19 @@ class DistributedPlanningSolver(object):
         for time in range(longest_path):
             # stop the loop when the system is solved
             if len(agents_at_goals) == len(self.num_of_agents):
-                raise "It is solved!!"
+                print("It is solved!!")
                 break
-
-
             # check whether future conflicts
             for i in range(len(self.num_of_agents - 1)):
                 for j in range(len(self.num_of_agents)):
                     if self.detect_warning(DAgent[f'Agent{i}'].location, DAgent[f'Agent{j}'].location):
-                        #TODO: merge rules and create formula
+                        print("They are too close - they will collide")
+                        nonpriority_agent = self.solve_priority(DAgent[f'Agent{i}'],  DAgent[f'Agent{j}'])
+
+                        #next_steps_priority_agent =
+
+
+
 
                         #replan
 
